@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {createEmployee, getEmployee, updateEmployee} from "../services/EmployeeService.js";
 import {useNavigate, useParams} from "react-router-dom";
 
@@ -14,13 +14,17 @@ const EmployeeComponent = () => {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
+    const [department, setDepartment] = useState("");
+    const [salary, setSalary] = useState("");
+    const emailInputRef = useRef(null);
 
     // State variable to hold any validation errors
     const [error, setError] = useState({
         firstName: "",
         lastName: "",
         email: "",
-        phone: ""
+        phone: "",
+        salary: ""
     });
 
     // Hook to navigate between pages
@@ -37,6 +41,8 @@ const EmployeeComponent = () => {
                 setLastName(response.data.lastName);
                 setEmail(response.data.email);
                 setPhone(response.data.phone);
+                setDepartment(response.data.department ?? "");
+                setSalary(response.data.salary == null ? "" : String(response.data.salary));
             }).catch((error) => {
                 console.error("Error fetching employee details: ", error);
             });
@@ -70,6 +76,9 @@ const EmployeeComponent = () => {
         if (!email.trim()) {
             errors.email = "Email is required";
             isValid = false;
+        } else if (!emailInputRef.current?.validity.valid) {
+            errors.email = "Enter a valid email address";
+            isValid = false;
         } else {
             errors.email = "";
         }
@@ -78,8 +87,18 @@ const EmployeeComponent = () => {
         if (!phone.trim()) {
             errors.phone = "Phone is required";
             isValid = false;
+        } else if (!/^\+1[2-9]\d{2}[2-9]\d{6}$/.test(phone)) {
+            errors.phone = "Enter a US or Canada phone number in E.164 format (for example, +12025550123)";
+            isValid = false;
         } else {
             errors.phone = "";
+        }
+
+        if (salary.trim() && !Number.isFinite(Number(salary))) {
+            errors.salary = "Salary must be a valid number";
+            isValid = false;
+        } else {
+            errors.salary = "";
         }
 
         setError(errors); // Update the error state with the new validation results
@@ -92,7 +111,14 @@ const EmployeeComponent = () => {
         e.preventDefault(); // Prevent the default form submission behavior
 
         // Create an employee object with the entered details
-        const employee = {firstName, lastName, email, phone};
+        const employee = {
+            firstName,
+            lastName,
+            email: email.trim(),
+            phone,
+            department: department.trim() || null,
+            salary: salary.trim() ? Number(salary) : null
+        };
         console.log("Saving employee with below details");
         console.log(employee); // Log the employee object to the console
 
@@ -134,7 +160,7 @@ const EmployeeComponent = () => {
                         {setPageTitle()}
                     </div>
                     <div className={"card-body"}>
-                        <form>
+                        <form noValidate onSubmit={saveOrUpdateEmployee}>
                             <div className={"form-group mb-2"}>
                                 <label className={"form-label"}>First Name</label>
                                 <input
@@ -154,7 +180,8 @@ const EmployeeComponent = () => {
                                 {error.lastName && <div className={"invalid-feedback"}>{error.lastName}</div>}
                                 <label className={"form-label"}>Email</label>
                                 <input
-                                    type={"text"}
+                                    ref={emailInputRef}
+                                    type={"email"}
                                     className={`form-control ${error.email ? "is-invalid" : ""}`}
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
@@ -168,9 +195,25 @@ const EmployeeComponent = () => {
                                     onChange={(e) => setPhone(e.target.value)}
                                 />
                                 {error.phone && <div className={"invalid-feedback"}>{error.phone}</div>}
+                                <label className={"form-label"}>Department</label>
+                                <input
+                                    type={"text"}
+                                    className={"form-control"}
+                                    value={department}
+                                    onChange={(e) => setDepartment(e.target.value)}
+                                />
+                                <label className={"form-label"}>Salary</label>
+                                <input
+                                    type={"number"}
+                                    step={"any"}
+                                    className={`form-control ${error.salary ? "is-invalid" : ""}`}
+                                    value={salary}
+                                    onChange={(e) => setSalary(e.target.value)}
+                                />
+                                {error.salary && <div className={"invalid-feedback"}>{error.salary}</div>}
                             </div>
-                            <button type={"submit"} className={"btn btn-success"}
-                                    onClick={saveOrUpdateEmployee}>Submit
+                            <button type={"submit"} className={"btn btn-success"}>
+                                Submit
                             </button>
                         </form>
                     </div>
