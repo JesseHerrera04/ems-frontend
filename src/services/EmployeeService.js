@@ -1,7 +1,12 @@
 import axios from 'axios';
 
-// The base URL for the Employee REST API
-const REST_API_BASE_URL = 'http://localhost:8080/api/employees';
+const LOCAL_REST_API_BASE_URL = 'http://localhost:8080/api/employees';
+const REST_API_BASE_URL = import.meta.env.VITE_API_BASE_URL ||
+    (import.meta.env.PROD ? "" : LOCAL_REST_API_BASE_URL);
+
+if (!REST_API_BASE_URL) {
+    throw new Error("VITE_API_BASE_URL must be configured for production");
+}
 
 // Get all employees
 export const listEmployees = () => axios.get(REST_API_BASE_URL);

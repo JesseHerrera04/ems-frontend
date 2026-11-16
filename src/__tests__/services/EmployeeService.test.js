@@ -72,4 +72,16 @@ describe("EmployeeService", () => {
         // Then (expected result): The service sends DELETE to the employee-specific endpoint.
         expect(axios.delete).toHaveBeenCalledWith(`${baseUrl}/7`);
     });
+
+    it("requires an API URL for production", async () => {
+        vi.stubEnv("PROD", true);
+        vi.stubEnv("VITE_API_BASE_URL", "");
+        vi.resetModules();
+
+        // Given (initial condition/param/state): Production mode has no API URL configured.
+        // When (action that occurs): The employee service module is loaded.
+        // Then (expected result): Loading fails with a clear configuration error.
+        await expect(import("../../services/EmployeeService.js"))
+            .rejects.toThrow("VITE_API_BASE_URL must be configured for production");
+    });
 });
