@@ -65,6 +65,8 @@ const ListEmployeeComponent = () => {
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>Phone</th>
+                    <th>Department</th>
+                    <th>Salary</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -78,6 +80,12 @@ const ListEmployeeComponent = () => {
                                 <td>{employee.lastName}</td>
                                 <td>{employee.email}</td>
                                 <td>{employee.phone}</td>
+                                <td>{employee.department?.trim() || "—"}</td>
+                                <td>
+                                    {employee.salary == null || String(employee.salary).trim() === ""
+                                        ? "—"
+                                        : employee.salary}
+                                </td>
                                 <td>
                                     <button className={"btn btn-info"}
                                             onClick={() => updateEmployee(employee.id)}>Update
