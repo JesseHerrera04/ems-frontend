@@ -1,5 +1,8 @@
 # Employee Management System - Frontend
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-AWS_Amplify-FF9900?style=for-the-badge&logo=awsamplify&logoColor=white)](https://main.d1u8p67w1orxg1.amplifyapp.com)
+[![Backend API](https://img.shields.io/badge/API-AWS_API_Gateway-8C4FFF?style=for-the-badge&logo=amazonapigateway&logoColor=white)](https://9mw56dfg4l.execute-api.us-east-2.amazonaws.com/actuator/health)
+
 [![React](https://img.shields.io/badge/React-19.x-61DAFB?style=flat-square&logo=react)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-7.x-646CFF?style=flat-square&logo=vite)](https://vitejs.dev/)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=flat-square&logo=bootstrap)](https://getbootstrap.com/)
