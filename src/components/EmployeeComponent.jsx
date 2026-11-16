@@ -94,8 +94,8 @@ const EmployeeComponent = () => {
             errors.phone = "";
         }
 
-        if (salary.trim() && !Number.isFinite(Number(salary))) {
-            errors.salary = "Salary must be a valid number";
+        if (salary.trim() && !Number.isInteger(Number(salary))) {
+            errors.salary = "Salary must be a whole number";
             isValid = false;
         } else {
             errors.salary = "";
@@ -162,24 +162,27 @@ const EmployeeComponent = () => {
                     <div className={"card-body"}>
                         <form noValidate onSubmit={saveOrUpdateEmployee}>
                             <div className={"form-group mb-2"}>
-                                <label className={"form-label"}>First Name</label>
+                                <label className={"form-label"} htmlFor={"firstName"}>First Name</label>
                                 <input
+                                    id={"firstName"}
                                     type={"text"}
                                     className={`form-control ${error.firstName ? "is-invalid" : ""}`}
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
                                 />
                                 {error.firstName && <div className={"invalid-feedback"}>{error.firstName}</div>}
-                                <label className={"form-label"}>Last Name</label>
+                                <label className={"form-label"} htmlFor={"lastName"}>Last Name</label>
                                 <input
+                                    id={"lastName"}
                                     type={"text"}
                                     className={`form-control ${error.lastName ? "is-invalid" : ""}`}
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
                                 />
                                 {error.lastName && <div className={"invalid-feedback"}>{error.lastName}</div>}
-                                <label className={"form-label"}>Email</label>
+                                <label className={"form-label"} htmlFor={"email"}>Email</label>
                                 <input
+                                    id={"email"}
                                     ref={emailInputRef}
                                     type={"email"}
                                     className={`form-control ${error.email ? "is-invalid" : ""}`}
@@ -187,25 +190,28 @@ const EmployeeComponent = () => {
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                                 {error.email && <div className={"invalid-feedback"}>{error.email}</div>}
-                                <label className={"form-label"}>Phone</label>
+                                <label className={"form-label"} htmlFor={"phone"}>Phone</label>
                                 <input
+                                    id={"phone"}
                                     type={"text"}
                                     className={`form-control ${error.phone ? "is-invalid" : ""}`}
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value)}
                                 />
                                 {error.phone && <div className={"invalid-feedback"}>{error.phone}</div>}
-                                <label className={"form-label"}>Department</label>
+                                <label className={"form-label"} htmlFor={"department"}>Department</label>
                                 <input
+                                    id={"department"}
                                     type={"text"}
                                     className={"form-control"}
                                     value={department}
                                     onChange={(e) => setDepartment(e.target.value)}
                                 />
-                                <label className={"form-label"}>Salary</label>
+                                <label className={"form-label"} htmlFor={"salary"}>Salary</label>
                                 <input
+                                    id={"salary"}
                                     type={"number"}
-                                    step={"any"}
+                                    step={"1"}
                                     className={`form-control ${error.salary ? "is-invalid" : ""}`}
                                     value={salary}
                                     onChange={(e) => setSalary(e.target.value)}
